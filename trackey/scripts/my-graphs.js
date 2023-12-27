@@ -5,7 +5,7 @@ const data = {
   datasets: [
     {
       label: "EUR",
-      data: [userProfile.totalExpenses, userProfile.totalExpenses],
+      data: [userProfile.totalExpenses, userProfile.budget],
       backgroundColor: ["rgb(67, 90, 247)", "rgb(255,195,0)"],
       hoverOffset: 4,
     },

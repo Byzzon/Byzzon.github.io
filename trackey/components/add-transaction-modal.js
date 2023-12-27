@@ -1,125 +1,196 @@
+// Modal Elements
 const modal = document.getElementById("myModal");
-const span = document.getElementsByClassName("close")[0];
-const modalTitle = document.getElementById("modal-title");
 const modalContent = document.getElementById("modal-content");
-const modalSelectExpense = document.getElementById("modal-select-expense");
-const modalSelectIncome = document.getElementById("modal-select-income");
+const modalTitle = document.getElementById("modal-title");
 const modalBody = document.getElementById("modal-body");
-const transactionDescriptionInput = document.getElementById(
-  "transaction-description"
-);
 const categoryImg = document.getElementById("category-img");
-const categoryInput = document.getElementById("category-input");
-const addTransactionBtn = document.getElementById("add-transaction-btn");
-const amountInput = document.getElementById("amount-input");
+const categoryModal = document.querySelector(".category-modal");
+const modalErrorMsg = document.getElementById("modal-error-message");
+// Buttons
+const btnClose = document.getElementsByClassName("close")[0];
+const btnSelectExpense = document.getElementById("modal-select-expense");
+const btnSelectIncome = document.getElementById("modal-select-income");
+const btnAddTransaction = document.getElementById("add-transaction-btn");
+// Input Elements
+const inputAmount = document.getElementById("amount-input");
+const inputDate = document.getElementById("input-date");
+const inputCategory = document.getElementById("category-input");
+const inputDescription = document.getElementById("transaction-description");
+// External Elements
 const totalIncomeP = document.getElementById("total-income");
 const totalExpensesP = document.getElementById("total-expenses");
-const categoryModal = document.querySelector(".category-modal");
-
+const transactionList = document.getElementById("transaction-list");
+// Enums
 const TransactionType = Object.freeze({
   INCOME: "income",
   EXPENSE: "expense",
 });
+const Menu = Object.freeze({
+  ADD_TRANSACTION: "addTransaction",
+  SELECT_CATEGORY: "selectCategory",
+});
+// Global Variables
+let currentMenu = Menu.ADD_TRANSACTION;
 let transactionType = TransactionType.INCOME;
 
-// Event Listeners
-// When the user clicks on <span> (x), close the modal
-span.addEventListener("click", () => {
-  closeModal();
-});
-
-// When the user clicks anywhere outside of the modal, close it
-window.addEventListener("click", (event) => {
+/////////////////////
+// Event Handlers //
+///////////////////
+const handleClickOutsideModal = (event) => {
   if (event.target == modal) {
     closeModal();
   }
-});
+};
 
-modalSelectIncome.addEventListener("click", (e) => {
+const handleButtonClose = () => {
+  if (currentMenu === Menu.SELECT_CATEGORY) {
+    hideSelectCategory();
+    showAddTransaction();
+  } else {
+    closeModal();
+  }
+};
+
+const handleButtonIncome = () => {
   setIncomeButtonActive();
   transactionType = TransactionType.INCOME;
-});
+};
 
-modalSelectExpense.addEventListener("click", (e) => {
+const handleButtonExpense = () => {
   setExpenseButtonActive();
   transactionType = TransactionType.EXPENSE;
-});
+};
 
-categoryInput.addEventListener("click", () => {
-  displaySelectCategory();
-});
+const handleInputCategory = () => {
+  showSelectCategory();
+};
 
-addTransactionBtn.addEventListener("click", () => {
+const handleButtonAddTransaction = () => {
   const transaction = {};
-  transaction.amount = Number(amountInput.value);
+  transaction.amount = Number(inputAmount.value);
 
-  if (transaction.amount <= 0) {
+  if (transaction.amount <= 0 || inputCategory.value === "") {
     return;
   }
 
-  if (transactionType === TransactionType.INCOME) {
-    addIncome(transaction.amount);
-    closeModal();
+  switch (transactionType) {
+    case TransactionType.INCOME:
+      if (userProfile.addMoney(transaction.amount)) {
+        registerTransaction();
+      } else {
+      }
+      break;
+    case TransactionType.EXPENSE:
+      if (userProfile.subtractMoney(transaction.amount)) {
+        registerTransaction();
+      } else {
+        showModalError("Insufficient funds, check your budget.");
+      }
+    default:
+      break;
   }
+};
 
-  if (transactionType === TransactionType.EXPENSE) {
-    addExpense(transaction.amount);
-    closeModal();
-  }
+////////////////////////////
+// Add Transaction Logic //
+//////////////////////////
+const showModalError = (message) => {
+  modalErrorMsg.classList.add("error-msg-active");
+  modalErrorMsg.classList.remove("error-msg-hidden");
+  modalErrorMsg.innerText = message;
 
+  setTimeout(() => {
+    hideModalError();
+  }, 3000);
+};
+
+const hideModalError = () => {
+  modalErrorMsg.innerText = "";
+  modalErrorMsg.classList.add("error-msg-hidden");
+  modalErrorMsg.classList.remove("error-msg-active");
+};
+
+const registerTransaction = () => {
   userProfile.transactions.push(getTransactionObject());
-});
+  userProfile.totalTransactions += 1;
+  updateChart();
+  updateChartLabels();
+  renderTransactionList();
+  clearInputs();
+};
 
-// Methods
-const displaySelectCategory = () => {
-  modalBody.style.display = "none";
+const updateChartLabels = () => {
+  totalIncomeP.innerText = `${userProfile.budget} €`;
+  totalExpensesP.innerText = `${userProfile.totalExpenses} €`;
+};
+
+const updateChart = () => {
+  // Budget
+  data.datasets[0].data[1] = userProfile.budget;
+  // Expenses
+  data.datasets[0].data[0] = userProfile.totalExpenses;
+  chart.update();
+};
+
+const showSelectCategory = () => {
+  hideAddTransaction();
   modalTitle.innerText = "Select Category";
   categoryModal.style.display = "grid";
+  currentMenu = Menu.SELECT_CATEGORY;
 };
 
 const hideSelectCategory = () => {
   categoryModal.style.display = "none";
 };
 
-const displayAddTransaction = () => {
+const showAddTransaction = () => {
   hideSelectCategory();
   modalBody.style.display = "flex";
   modalTitle.innerText = "Add Transaction";
+  currentMenu = Menu.ADD_TRANSACTION;
+};
+
+const hideAddTransaction = () => {
+  modalBody.style.display = "none";
 };
 
 const closeModal = () => {
   modal.style.display = "none";
+  currentMenu = Menu.ADD_TRANSACTION;
+  clearInputs();
 };
 
-const addIncome = (amount) => {
-  chart.data.datasets[0].data[1] += amount;
-  userProfile.totalIncome += amount;
-  totalIncomeP.innerText = userProfile.totalIncome + " €";
-  chart.update();
+const subtractBudget = (amount) => {
+  if (userProfile.budget - amount >= 0) {
+    userProfile.budget -= amount;
+    userProfile.totalIncome -= amount;
+    totalIncomeP.innerText = userProfile.budget + " €";
+    chart.data.datasets[0].data[1] -= amount;
+    chart.update();
+  }
 };
 
 const addExpense = (amount) => {
-  chart.data.datasets[0].data[0] += amount;
-  userProfile.totalExpenses += amount;
-  totalExpensesP.innerText = userProfile.totalExpenses + " €";
-  chart.update();
+  subtractBudget(amount);
 };
 
 const setIncomeButtonActive = () => {
-  modalSelectExpense.classList.remove("bg-red");
-  modalSelectIncome.classList.add("bg-green");
+  btnSelectExpense.classList.remove("bg-red");
+  btnSelectIncome.classList.add("bg-green");
 };
 
 const setExpenseButtonActive = () => {
-  modalSelectExpense.classList.add("bg-red");
-  modalSelectIncome.classList.remove("bg-green");
+  btnSelectExpense.classList.add("bg-red");
+  btnSelectIncome.classList.remove("bg-green");
 };
 
 const getTransactionObject = () => {
   return {
-    amount: Number(amountInput.value),
-    description: transactionDescriptionInput.value,
-    category: categoryInput.value,
+    id: userProfile.totalTransactions,
+    amount: Number(inputAmount.value),
+    description: inputDescription.value,
+    date: inputDate.value,
+    category: inputCategory.value,
     type:
       transactionType === TransactionType.INCOME
         ? TransactionType.INCOME
@@ -128,11 +199,61 @@ const getTransactionObject = () => {
 };
 
 const setCategoryInput = (category) => {
-  categoryInput.value = category;
+  inputCategory.value = category;
 };
 
 const setCategoryImg = (imgURL) => {
   categoryImg.src = imgURL;
+};
+
+const clearInputs = () => {
+  inputAmount.value = "";
+  inputDescription.value = "";
+  setInputDateToday();
+  inputCategory.value = "";
+  setCategoryImg("./images/icons/tag.svg");
+};
+
+const addTransactionToTransactionList = (transactionObject) => {
+  const categoryImgURL = globalSettings.defaultCategories.find(
+    (defaultCategory) => {
+      return defaultCategory.category == transactionObject.category;
+    }
+  ).img;
+
+  const newRow = `
+    <tr data-transaction-id=${transactionObject.id}>
+    <td>
+    <span class="img-cel">
+    <img src=${categoryImgURL} alt="" />
+    <span>${transactionObject.category}</span>
+    </span>
+    </td>
+    <td>${transactionObject.description}</td>
+    <td>${transactionObject.date}</td>
+    <td>${transactionObject.amount} €</td>
+    <td>
+    ${transactionObject.type}
+    <div class="${transactionObject.type}-color-tag"></div>
+    </td>
+    </tr>
+    `;
+
+  transactionList.innerHTML += newRow;
+};
+
+const clearTransactionList = () => {
+  transactionList.innerHTML = "";
+};
+
+const renderTransactionList = () => {
+  clearTransactionList();
+  userProfile.transactions
+    .slice()
+    .reverse()
+    .forEach((transaction) => {
+      addTransactionToTransactionList(transaction);
+    });
 };
 
 ////////////////////////////
@@ -141,11 +262,11 @@ const setCategoryImg = (imgURL) => {
 const addCategories = () => {
   globalSettings.defaultCategories.forEach((category) => {
     categoryModal.innerHTML += `
-    <div class="category-item" data-category=${category.category} data-category-img=${category.img}>
+      <div class="category-item" data-category=${category.category} data-category-img=${category.img}>
       <img src=${category.img} alt="" />
       <p>${category.category}</p>
-    </div>
-    `;
+      </div>
+      `;
   });
 
   document.querySelectorAll(".category-item").forEach((element) => {
@@ -161,8 +282,38 @@ const onCategorySelected = (category, imgUrl) => {
   setCategoryInput(category);
   setCategoryImg(imgUrl);
   hideSelectCategory();
-  displayAddTransaction();
+  showAddTransaction();
 };
 
+const setInputDateToday = () => {
+  const dt = new Date();
+  const day = ("0" + dt.getDate()).slice(-2);
+  const month = ("0" + (dt.getMonth() + 1)).slice(-2);
+  const date = dt.getFullYear() + "-" + month + "-" + day;
+
+  inputDate.value = date;
+};
+
+/////////////////////
+// Function Calls //
+///////////////////
 setIncomeButtonActive();
 addCategories();
+setInputDateToday();
+
+//////////////////////
+// Event Listeners //
+////////////////////
+btnClose.addEventListener("click", handleButtonClose);
+
+window.addEventListener("mousedown", (event) => {
+  handleClickOutsideModal(event);
+});
+
+btnSelectIncome.addEventListener("click", handleButtonIncome);
+
+btnSelectExpense.addEventListener("click", handleButtonExpense);
+
+inputCategory.addEventListener("click", handleInputCategory);
+
+btnAddTransaction.addEventListener("click", handleButtonAddTransaction);

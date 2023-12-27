@@ -10,7 +10,7 @@
       type="image/x-icon"
     />
     <!-- Styles -->
-    <link rel="stylesheet" href="./styles/main.css" />
+    <link rel="stylesheet" href="./styles/index.css" />
     <link rel="stylesheet" href="./styles/scrollbar.css" />
     <link rel="stylesheet" href="./components/add-transaction-modal.css" />
 
@@ -31,11 +31,12 @@
     <script src="./scripts/plugins/vanta-waves/vanta-waves.js" defer></script>
 
     <!-- Local Scripts -->
+    <script type="module" src="./scripts/util/util.mjs"></script>
+    <script src="./scripts/util/profile.js"></script>
+    <script src="./scripts/util/settings.js"></script>
     <script src="./scripts/my-graphs.js" defer></script>
     <script src="./components/add-transaction-modal.js" defer></script>
     <script type="module" src="./scripts/index.mjs" defer></script>
-    <script src="./scripts/profile.js"></script>
-    <script src="./scripts/settings.js"></script>
   </head>
   <body id="main-container" class="main-container">
     <!-- ADD-TRANSACTION-MODAL BEGIN -->
@@ -49,9 +50,10 @@
         <!-- Modal Body -->
         <div>
           <div id="modal-body" class="modal-body">
+            <p id="modal-error-message" class="error-msg-hidden"></p>
             <div class="transaction-type">
-              <span id="modal-select-expense" class="clickable">Expense</span>
               <span id="modal-select-income" class="clickable">Income</span>
+              <span id="modal-select-expense" class="clickable">Expense</span>
             </div>
             <div class="input-fields-container">
               <input
@@ -64,7 +66,13 @@
               <input
                 id="transaction-description"
                 type="text"
-                class="text-input"
+                class="text-input rounded-border"
+              />
+              <label for="">Date</label>
+              <input
+                id="input-date"
+                type="date"
+                class="text-input rounded-border"
               />
               <label for="">Category</label>
               <span class="category-row">
@@ -72,8 +80,9 @@
                 <input
                   id="category-input"
                   type="text"
-                  class="text-input category-input clickable"
+                  class="text-input category-input clickable rounded-border"
                   placeholder="Select Category"
+                  tabindex="-1"
                 />
               </span>
               <button id="add-transaction-btn" class="grey-button">
@@ -81,24 +90,7 @@
               </button>
             </div>
           </div>
-          <div class="category-modal">
-            <!-- <div class="category-item">
-              <img src="./images/icons/restaurant.svg" alt="" />
-              <p>Food</p>
-            </div>
-            <div class="category-item">
-              <img src="./images/icons/restaurant.svg" alt="" />
-              <p>Food</p>
-            </div>
-            <div class="category-item">
-              <img src="./images/icons/restaurant.svg" alt="" />
-              <p>Food</p>
-            </div>
-            <div class="category-item">
-              <img src="./images/icons/restaurant.svg" alt="" />
-              <p>Food</p>
-            </div> -->
-          </div>
+          <div class="category-modal"></div>
         </div>
         <!-- <div class="modal-footer">
           <h3>Modal Footer</h3>
@@ -108,7 +100,7 @@
     <!-- ADD-TRANSACTION-MODAL END -->
 
     <!-- Navigation -->
-    <nav>
+    <nav class="grey-container rounded-borders">
       <div>
         <h1 class="gradient-text">Trackey</h1>
         <p>Expense Tracker</p>
@@ -163,19 +155,19 @@
     <!-- Main Content -->
     <main>
       <div class="greeting-cel">
-        <h1>Hello Gilian,</h1>
+        <h1 id="greeting-title"></h1>
         <p>Take a look at your current balance 👀</p>
       </div>
       <div class="graph-cel">
         <span>
           <div class="income-label">
-            <p>Income</p>
-            <span></span>
+            <p>Budget</p>
+            <div class="income-color-tag"></div>
             <p id="total-income">0,00 €</p>
           </div>
           <div class="expense-label">
             <p>Expenses</p>
-            <span></span>
+            <div class="expense-color-tag"></div>
             <p id="total-expenses">0,00 €</p>
           </div>
         </span>
@@ -190,6 +182,40 @@
           <img src="./images/icons/add.svg" alt="" />
           <p>Add New Transaction</p>
         </button>
+      </div>
+
+      <!-- Transaction History -->
+      <div
+        class="transaction-list-cel grey-container rounded-border overflow-scroll"
+      >
+        <h2 class="title-2">Transaction Overview</h2>
+        <table class="transaction-list">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody id="transaction-list"></tbody>
+          <!-- <tr data-transaction-id="15645e156">
+            <td>
+              <span class="img-cel">
+                <img src="./images/icons/restaurant.svg" alt="" />
+                <span>Food</span>
+              </span>
+            </td>
+            <td>San George</td>
+            <td>27/12/23</td>
+            <td>19,50 €</td>
+            <td>
+              Expense
+              <div class="expense-color-tag"></div>
+            </td>
+          </tr> -->
+        </table>
       </div>
     </main>
   </body>
