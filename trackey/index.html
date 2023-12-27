@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trackey - Expense Tracker</title>
+    <link
+      rel="shortcut icon"
+      href="./images/icons/trackey-favicon.png"
+      type="image/x-icon"
+    />
+    <!-- Styles -->
+    <link rel="stylesheet" href="./styles/main.css" />
+    <link rel="stylesheet" href="./styles/scrollbar.css" />
+    <link rel="stylesheet" href="./components/add-transaction-modal.css" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- 3rd Party Scripts -->
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Vanta.js -->
+    <script src="./scripts/plugins/vanta-waves/three.r134.min.js"></script>
+    <script src="./scripts/plugins/vanta-waves/vanta.waves.min.js"></script>
+    <script src="./scripts/plugins/vanta-waves/vanta-waves.js" defer></script>
+
+    <!-- Local Scripts -->
+    <script src="./scripts/my-graphs.js" defer></script>
+    <script src="./components/add-transaction-modal.js" defer></script>
+    <script type="module" src="./scripts/index.mjs" defer></script>
+    <script src="./scripts/profile.js"></script>
+    <script src="./scripts/settings.js"></script>
+  </head>
+  <body id="main-container" class="main-container">
+    <!-- ADD-TRANSACTION-MODAL BEGIN -->
+    <div id="myModal" class="modal">
+      <div id="modal-content" class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h2 id="modal-title">Add Transaction</h2>
+          <span class="close">&times;</span>
+        </div>
+        <!-- Modal Body -->
+        <div>
+          <div id="modal-body" class="modal-body">
+            <div class="transaction-type">
+              <span id="modal-select-expense" class="clickable">Expense</span>
+              <span id="modal-select-income" class="clickable">Income</span>
+            </div>
+            <div class="input-fields-container">
+              <input
+                class="amount-input"
+                type="number"
+                id="amount-input"
+                placeholder="0"
+              />
+              <label for="">Description</label>
+              <input
+                id="transaction-description"
+                type="text"
+                class="text-input"
+              />
+              <label for="">Category</label>
+              <span class="category-row">
+                <img id="category-img" src="./images/icons/tag.svg" alt="" />
+                <input
+                  id="category-input"
+                  type="text"
+                  class="text-input category-input clickable"
+                  placeholder="Select Category"
+                />
+              </span>
+              <button id="add-transaction-btn" class="grey-button">
+                Add Transaction
+              </button>
+            </div>
+          </div>
+          <div class="category-modal">
+            <!-- <div class="category-item">
+              <img src="./images/icons/restaurant.svg" alt="" />
+              <p>Food</p>
+            </div>
+            <div class="category-item">
+              <img src="./images/icons/restaurant.svg" alt="" />
+              <p>Food</p>
+            </div>
+            <div class="category-item">
+              <img src="./images/icons/restaurant.svg" alt="" />
+              <p>Food</p>
+            </div>
+            <div class="category-item">
+              <img src="./images/icons/restaurant.svg" alt="" />
+              <p>Food</p>
+            </div> -->
+          </div>
+        </div>
+        <!-- <div class="modal-footer">
+          <h3>Modal Footer</h3>
+        </div> -->
+      </div>
+    </div>
+    <!-- ADD-TRANSACTION-MODAL END -->
+
+    <!-- Navigation -->
+    <nav>
+      <div>
+        <h1 class="gradient-text">Trackey</h1>
+        <p>Expense Tracker</p>
+      </div>
+      <ul>
+        <li class="nav-active">
+          <a href="index.html">
+            <span class="gradient-background">
+              <img src="./images/icons/home.svg" alt="" />
+            </span>
+            <p>Dashboard</p>
+          </a>
+        </li>
+        <li>
+          <a href="reports.html">
+            <span>
+              <img src="./images/icons/lab_profile.svg" alt="" />
+            </span>
+            <p>Reports</p>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span>
+              <img src="./images/icons/history.svg" alt="" />
+            </span>
+            <p>History</p>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span>
+              <img src="./images/icons/account_circle.svg" alt="" />
+            </span>
+            <p>Profile</p>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span>
+              <img src="./images/icons/manufacturing.svg" alt="" />
+            </span>
+            <p>Settings</p>
+          </a>
+        </li>
+      </ul>
+      <div class="made-by">
+        <p>Made by Gilian Hoskens</p>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+      <div class="greeting-cel">
+        <h1>Hello Gilian,</h1>
+        <p>Take a look at your current balance 👀</p>
+      </div>
+      <div class="graph-cel">
+        <span>
+          <div class="income-label">
+            <p>Income</p>
+            <span></span>
+            <p id="total-income">0,00 €</p>
+          </div>
+          <div class="expense-label">
+            <p>Expenses</p>
+            <span></span>
+            <p id="total-expenses">0,00 €</p>
+          </div>
+        </span>
+        <canvas id="my-graph"></canvas>
+      </div>
+      <div class="add-transaction-cel">
+        <button
+          id="new-transaction-btn"
+          class="add-transaction-button"
+          type="button"
+        >
+          <img src="./images/icons/add.svg" alt="" />
+          <p>Add New Transaction</p>
+        </button>
+      </div>
+    </main>
+  </body>
+</html>

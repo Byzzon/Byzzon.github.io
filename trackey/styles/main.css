@@ -1,0 +1,280 @@
+:root {
+  --dark-grey: #121212;
+  --medium-grey: #1e1e23;
+  --light-grey: #303034;
+  --lighter-grey: #b5b3b3;
+  --yellow: #ffc300;
+  --blue: #435af7;
+}
+
+/* CSS RESET */
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* BEGIN STYLE */
+body {
+  background-color: var(--dark-grey);
+  font-family: "Inter", sans-serif;
+}
+
+/* NAVIGATION SIDEBAR */
+nav {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--medium-grey);
+  color: #fff;
+  border-radius: 1rem;
+  border: 1px solid var(--light-grey);
+  width: 20rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  margin-bottom: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+nav div p {
+  color: var(--lighter-grey);
+}
+
+nav div h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: orange;
+  width: 12rem;
+}
+
+.made-by {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  height: 100%;
+  color: #b5b3b3;
+  font-size: 0.9rem;
+}
+
+nav ul {
+  margin-top: 3rem;
+}
+
+/* NAV ITEMS */
+nav ul li {
+  display: flex;
+  align-items: center;
+  border-radius: 0.5rem;
+  margin-bottom: 3rem;
+  cursor: pointer;
+  transition: 0.3s;
+  animation-timing-function: ease-out;
+}
+
+nav ul li:hover {
+  background-color: #303034;
+}
+
+nav ul li a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #fff;
+  text-decoration: none;
+  width: 100%;
+}
+
+nav ul li span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1e1e23;
+  border-radius: 0.5rem;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+nav ul li span img {
+  float: left;
+  width: 2rem;
+}
+
+nav ul li a:visited {
+  color: #fff;
+}
+
+/* MAIN CONTENT */
+main {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  grid-template-rows: repeat(7, 1fr);
+  width: 100%;
+  color: #fff;
+  /* background-color: red; */
+}
+
+main h1 {
+  font-size: 3rem;
+  font-weight: 600;
+}
+
+.greeting-cel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2rem 0 2rem;
+  grid-column: 1;
+  column-span: 3;
+  grid-row: 2;
+}
+
+.greeting-cel p {
+  font-size: 1.2rem;
+  color: #b5b3b3;
+}
+
+.graph-cel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  grid-column: 1;
+  grid-row: 3 / span 2;
+  color: #fff;
+}
+
+.graph-cel span {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.income-label p:nth-child(1),
+.expense-label p:nth-child(1) {
+  color: var(--lighter-grey);
+  padding-bottom: 0.5rem;
+}
+
+.income-label span {
+  display: inline-block;
+  width: 1.5rem;
+  height: 0.5rem;
+  background-color: var(--yellow);
+  border-radius: 0.2rem;
+}
+
+.expense-label span {
+  display: inline-block;
+  width: 1.5rem;
+  height: 0.5rem;
+  background-color: var(--blue);
+  border-radius: 0.2rem;
+}
+
+.income-label p:nth-child(3),
+.expense-label p:nth-child(3) {
+  display: inline-block;
+}
+
+.add-transaction-cel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: 1;
+  grid-row: 6;
+}
+
+.add-transaction-button {
+  display: flex;
+  align-items: center;
+  background-color: var(--medium-grey);
+  border: solid 1px var(--lighter-grey);
+  border-radius: 1rem;
+  color: #fff;
+  padding: 15px 32px;
+  font-family: "Inter", sans-serif;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 4px 2px;
+  cursor: pointer;
+  height: 3rem;
+  transition: 0.3s;
+}
+
+.add-transaction-button:hover {
+  background-color: var(--light-grey);
+}
+
+.main-container {
+  width: 100vw;
+  height: 100vh;
+  padding: 1rem 1rem 0 1rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-active {
+  display: flex;
+  align-items: center;
+  background-color: #303034;
+  border-radius: 0.5rem;
+  margin-bottom: 3rem;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.gradient-text {
+  background-color: #f3ec78;
+  background-image: linear-gradient(45deg, #f3ed77, #af4261);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+.gradient-background {
+  background-color: #f3ec78;
+  background-image: linear-gradient(45deg, #f3ec78, #af4261);
+  background-size: 100%;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+.color-swap {
+  color: #435af7;
+  color: #ffc300;
+}

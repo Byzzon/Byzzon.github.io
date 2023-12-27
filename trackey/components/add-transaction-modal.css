@@ -1,0 +1,240 @@
+/* The Modal (background) */
+.modal {
+  display: none; /*Hidden by default*/
+  position: fixed; /* Stay in place */
+  z-index: 10; /* Sit on top */
+  margin: 0 auto;
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #121212;
+  color: var(--lighter-grey);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--light-grey);
+  border-radius: 1rem;
+  width: 30rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #ccc;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--medium-grey);
+  color: white;
+  padding: 2px 16px;
+  height: 3rem;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.modal-body {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0;
+  background-color: #121212;
+}
+
+.transaction-type {
+  background-color: var(--medium-grey);
+  display: flex;
+  color: #fff;
+  border: 2px solid grey;
+  border-radius: 1rem;
+  height: 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.transaction-type span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1rem;
+  width: 10rem;
+  transition: 0.4s;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.input-fields-container {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  padding: 2rem 0;
+}
+
+.input-fields-container label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.amount-input {
+  background-color: transparent;
+  padding: 12px 20px;
+  border: none;
+  outline: none;
+  text-align: center;
+  color: #fff;
+  font-size: 3rem;
+}
+
+/* Hide 'number input' arrows in Chrome */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide 'number input' arrows in Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.text-input {
+  background-color: var(--medium-grey);
+  padding: 12px 20px;
+  display: inline-block;
+  border-bottom: 2px solid #ccc;
+  border-right: 0px;
+  border-radius: 1px;
+  box-sizing: border-box;
+  outline: none;
+  margin-bottom: 2rem;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.text-input:focus {
+  border: 2px solid var(--light-grey);
+  border-bottom: 2px solid #ccc;
+  color: #fff;
+}
+
+.category-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+}
+
+.category-input {
+  margin: 0;
+}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: var(--medium-grey);
+  color: white;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.bg-red {
+  background-color: rgb(188, 91, 91);
+}
+
+.bg-green {
+  background-color: rgb(151, 185, 100);
+}
+
+.grey-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--medium-grey);
+  border: solid 1px var(--lighter-grey);
+  border-radius: 1rem;
+  color: #fff;
+  padding: 15px 32px;
+  font-family: "Inter", sans-serif;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 4px 2px;
+  cursor: pointer;
+  height: 3rem;
+  transition: 0.3s;
+  margin-top: 5rem;
+}
+
+.grey-button:hover {
+  background-color: var(--light-grey);
+}
+
+.category-modal {
+  display: grid;
+  padding: 2rem;
+  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-row: auto;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  cursor: pointer;
+}
+
+.category-item img {
+  height: 3rem;
+  padding-bottom: 0.2rem;
+}

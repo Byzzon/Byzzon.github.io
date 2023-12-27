@@ -1,0 +1,15 @@
+VANTA.WAVES({
+  el: "#main-container",
+  mouseControls: false,
+  touchControls: false,
+  gyroControls: false,
+  minHeight: 200.0,
+  minWidth: 200.0,
+  scale: 1.0,
+  scaleMobile: 1.0,
+  color: 0x191920,
+  shininess: 1.0,
+  waveHeight: 8.5,
+  waveSpeed: 0.45,
+  zoom: 0.65,
+});
