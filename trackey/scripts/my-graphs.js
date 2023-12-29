@@ -36,3 +36,9 @@ const chart = new Chart(ctx, {
     },
   },
 });
+
+export const refreshChart = () => {
+  chart.data.datasets[0].data[0] = userProfile.totalExpenses;
+  chart.data.datasets[0].data[1] = userProfile.budget;
+  chart.update();
+};

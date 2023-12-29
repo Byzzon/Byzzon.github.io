@@ -1,5 +1,5 @@
 const userProfile = {
-  username: "snic",
+  username: "byzzon",
   totalExpenses: 0,
   totalIncome: 0,
   budget: 0,
@@ -20,5 +20,12 @@ const userProfile = {
       return true;
     }
     return false;
+  },
+  clearProfile: function () {
+    this.totalExpenses = 0;
+    this.totalIncome = 0;
+    this.budget = 0;
+    this.transactions = [];
+    this.totalTransactions = 0;
   },
 };

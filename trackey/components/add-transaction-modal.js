@@ -1,6 +1,12 @@
+import { renderTransactionList } from "../scripts/index.mjs";
+import { refreshChart } from "../scripts/my-graphs.js";
+import { addTransactionToDB } from "../scripts/util/database.js";
+import { updateChartLabels } from "../scripts/index.mjs";
+import Transaction from "../scripts/util/Transaction.js";
+import { with2Decimals } from "../scripts/util/util.mjs";
+
 // Modal Elements
-const modal = document.getElementById("myModal");
-const modalContent = document.getElementById("modal-content");
+export const modal = document.getElementById("myModal");
 const modalTitle = document.getElementById("modal-title");
 const modalBody = document.getElementById("modal-body");
 const categoryImg = document.getElementById("category-img");
@@ -16,22 +22,14 @@ const inputAmount = document.getElementById("amount-input");
 const inputDate = document.getElementById("input-date");
 const inputCategory = document.getElementById("category-input");
 const inputDescription = document.getElementById("transaction-description");
-// External Elements
-const totalIncomeP = document.getElementById("total-income");
-const totalExpensesP = document.getElementById("total-expenses");
-const transactionList = document.getElementById("transaction-list");
 // Enums
-const TransactionType = Object.freeze({
-  INCOME: "income",
-  EXPENSE: "expense",
-});
 const Menu = Object.freeze({
   ADD_TRANSACTION: "addTransaction",
   SELECT_CATEGORY: "selectCategory",
 });
-// Global Variables
+// Util
 let currentMenu = Menu.ADD_TRANSACTION;
-let transactionType = TransactionType.INCOME;
+let selectedTransactionType = Transaction.TransactionType.INCOME;
 
 /////////////////////
 // Event Handlers //
@@ -53,12 +51,12 @@ const handleButtonClose = () => {
 
 const handleButtonIncome = () => {
   setIncomeButtonActive();
-  transactionType = TransactionType.INCOME;
+  selectedTransactionType = Transaction.TransactionType.INCOME;
 };
 
 const handleButtonExpense = () => {
   setExpenseButtonActive();
-  transactionType = TransactionType.EXPENSE;
+  selectedTransactionType = Transaction.TransactionType.EXPENSE;
 };
 
 const handleInputCategory = () => {
@@ -66,25 +64,35 @@ const handleInputCategory = () => {
 };
 
 const handleButtonAddTransaction = () => {
-  const transaction = {};
-  transaction.amount = Number(inputAmount.value);
+  let transactionAmount = Number(inputAmount.value);
 
-  if (transaction.amount <= 0 || inputCategory.value === "") {
+  if (transactionAmount <= 0) {
+    showModalError("Amount must be higher than 0");
     return;
   }
 
-  switch (transactionType) {
-    case TransactionType.INCOME:
-      if (userProfile.addMoney(transaction.amount)) {
+  if (inputDescription.value === "") {
+    showModalError("Please add a description");
+    return;
+  }
+
+  if (inputCategory.value === "") {
+    showModalError("Please select a category");
+    return;
+  }
+
+  switch (selectedTransactionType) {
+    case Transaction.TransactionType.INCOME:
+      if (userProfile.addMoney(transactionAmount)) {
         registerTransaction();
       } else {
       }
       break;
-    case TransactionType.EXPENSE:
-      if (userProfile.subtractMoney(transaction.amount)) {
+    case Transaction.TransactionType.EXPENSE:
+      if (userProfile.subtractMoney(transactionAmount)) {
         registerTransaction();
       } else {
-        showModalError("Insufficient funds, check your budget.");
+        showModalError("Insufficient funds, check your budget");
       }
     default:
       break;
@@ -111,25 +119,14 @@ const hideModalError = () => {
 };
 
 const registerTransaction = () => {
-  userProfile.transactions.push(getTransactionObject());
+  const transactionObject = getTransactionObject();
+  userProfile.transactions.push(transactionObject);
+  addTransactionToDB(transactionObject);
   userProfile.totalTransactions += 1;
-  updateChart();
+  refreshChart();
   updateChartLabels();
   renderTransactionList();
   clearInputs();
-};
-
-const updateChartLabels = () => {
-  totalIncomeP.innerText = `${userProfile.budget} €`;
-  totalExpensesP.innerText = `${userProfile.totalExpenses} €`;
-};
-
-const updateChart = () => {
-  // Budget
-  data.datasets[0].data[1] = userProfile.budget;
-  // Expenses
-  data.datasets[0].data[0] = userProfile.totalExpenses;
-  chart.update();
 };
 
 const showSelectCategory = () => {
@@ -143,7 +140,7 @@ const hideSelectCategory = () => {
   categoryModal.style.display = "none";
 };
 
-const showAddTransaction = () => {
+export const showAddTransaction = () => {
   hideSelectCategory();
   modalBody.style.display = "flex";
   modalTitle.innerText = "Add Transaction";
@@ -160,18 +157,9 @@ const closeModal = () => {
   clearInputs();
 };
 
-const subtractBudget = (amount) => {
-  if (userProfile.budget - amount >= 0) {
-    userProfile.budget -= amount;
-    userProfile.totalIncome -= amount;
-    totalIncomeP.innerText = userProfile.budget + " €";
-    chart.data.datasets[0].data[1] -= amount;
-    chart.update();
-  }
-};
-
-const addExpense = (amount) => {
-  subtractBudget(amount);
+export const openModal = () => {
+  modal.style.display = "block";
+  showAddTransaction();
 };
 
 const setIncomeButtonActive = () => {
@@ -185,17 +173,18 @@ const setExpenseButtonActive = () => {
 };
 
 const getTransactionObject = () => {
-  return {
-    id: userProfile.totalTransactions,
-    amount: Number(inputAmount.value),
-    description: inputDescription.value,
-    date: inputDate.value,
-    category: inputCategory.value,
-    type:
-      transactionType === TransactionType.INCOME
-        ? TransactionType.INCOME
-        : TransactionType.EXPENSE,
-  };
+  let transaction = new Transaction(
+    Date.now(),
+    with2Decimals(inputAmount.value),
+    inputDescription.value,
+    inputCategory.value,
+    Date.parse(inputDate.value),
+    selectedTransactionType === Transaction.TransactionType.INCOME
+      ? Transaction.TransactionType.INCOME
+      : Transaction.TransactionType.EXPENSE
+  );
+
+  return transaction;
 };
 
 const setCategoryInput = (category) => {
@@ -212,48 +201,6 @@ const clearInputs = () => {
   setInputDateToday();
   inputCategory.value = "";
   setCategoryImg("./images/icons/tag.svg");
-};
-
-const addTransactionToTransactionList = (transactionObject) => {
-  const categoryImgURL = globalSettings.defaultCategories.find(
-    (defaultCategory) => {
-      return defaultCategory.category == transactionObject.category;
-    }
-  ).img;
-
-  const newRow = `
-    <tr data-transaction-id=${transactionObject.id}>
-    <td>
-    <span class="img-cel">
-    <img src=${categoryImgURL} alt="" />
-    <span>${transactionObject.category}</span>
-    </span>
-    </td>
-    <td>${transactionObject.description}</td>
-    <td>${transactionObject.date}</td>
-    <td>${transactionObject.amount} €</td>
-    <td>
-    ${transactionObject.type}
-    <div class="${transactionObject.type}-color-tag"></div>
-    </td>
-    </tr>
-    `;
-
-  transactionList.innerHTML += newRow;
-};
-
-const clearTransactionList = () => {
-  transactionList.innerHTML = "";
-};
-
-const renderTransactionList = () => {
-  clearTransactionList();
-  userProfile.transactions
-    .slice()
-    .reverse()
-    .forEach((transaction) => {
-      addTransactionToTransactionList(transaction);
-    });
 };
 
 ////////////////////////////
