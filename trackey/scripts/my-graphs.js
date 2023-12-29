@@ -1,7 +1,7 @@
 const ctx = document.getElementById("my-graph");
 
 const data = {
-  labels: ["Expenses", "Income"],
+  labels: ["Spent", "Remaining"],
   datasets: [
     {
       label: "EUR",

@@ -107,7 +107,12 @@
   align-items: center;
   border-radius: 1rem;
   width: 10rem;
-  transition: 0.4s;
+  transition: 0.2s;
+}
+
+.hoverable:hover {
+  background-color: var(--light-grey);
+  transition: 0.2s;
 }
 
 .clickable {
@@ -182,6 +187,7 @@ input[type="number"] {
 
 .category-input {
   margin: 0;
+  transition: 0.2s;
 }
 
 .modal-footer {
@@ -217,7 +223,7 @@ input[type="number"] {
   margin: 4px 2px;
   cursor: pointer;
   height: 3rem;
-  transition: 0.3s;
+  transition: 0.2s;
   margin-top: 5rem;
 }
 
@@ -234,10 +240,13 @@ input[type="number"] {
 }
 
 .category-item {
+  border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
-  justify-self: center;
+  align-items: center;
   cursor: pointer;
+  padding: 1rem;
+  transition: 0.2s;
 }
 
 .category-item img {

@@ -163,13 +163,17 @@ export const openModal = () => {
 };
 
 const setIncomeButtonActive = () => {
-  btnSelectExpense.classList.remove("bg-red");
   btnSelectIncome.classList.add("bg-green");
+  btnSelectIncome.classList.remove("hoverable");
+  btnSelectExpense.classList.remove("bg-red");
+  btnSelectExpense.classList.add("hoverable");
 };
 
 const setExpenseButtonActive = () => {
   btnSelectExpense.classList.add("bg-red");
+  btnSelectExpense.classList.remove("hoverable");
   btnSelectIncome.classList.remove("bg-green");
+  btnSelectIncome.classList.add("hoverable");
 };
 
 const getTransactionObject = () => {
@@ -209,17 +213,17 @@ const clearInputs = () => {
 const addCategories = () => {
   globalSettings.defaultCategories.forEach((category) => {
     categoryModal.innerHTML += `
-      <div class="category-item" data-category=${category.category} data-category-img=${category.img}>
+      <div name="category-item" class="category-item hoverable" data-category=${category.category} data-category-img=${category.img}>
       <img src=${category.img} alt="" />
       <p>${category.category}</p>
       </div>
       `;
   });
 
-  document.querySelectorAll(".category-item").forEach((element) => {
+  document.getElementsByName("category-item").forEach((element) => {
     element.addEventListener("click", (e) => {
-      const category = e.target.parentNode.dataset.category;
-      const imgUrl = e.target.parentNode.dataset.categoryImg;
+      const category = element.dataset.category;
+      const imgUrl = element.dataset.categoryImg;
       onCategorySelected(category, imgUrl);
     });
   });
