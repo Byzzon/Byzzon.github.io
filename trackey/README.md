@@ -29,19 +29,19 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/Byzzon/Trackey">
+    <img src="./images/icons/trackey-logo.svg" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Trackey</h3>
 
   <p align="center">
-    Expense Tracker
+    An easy to use expense tracker made with HTML, CSS & Vanilla Javascript.
     <br />
     <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://byzzon.github.io/trackey/">View Demo</a>
     ·
     <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
     ·
@@ -79,7 +79,7 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](./images/design/dashboard-screenshot.png)
+[![Product Name Screen Shot][product-screenshot]](./images/design/dashboard-screenshot-1.png)
 
 Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
 
@@ -167,6 +167,11 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Things I've Learned
+
+During this project I've learned to use the **IndexedDB API** to store data (locally) in the browser.
+<br>
+
 <!-- LICENSE -->
 
 ## License
@@ -210,7 +215,7 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: ./images/design/dashboard-screenshot.png
+[product-screenshot]: ./images/design/dashboard-screenshot-1.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB

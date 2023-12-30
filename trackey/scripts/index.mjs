@@ -63,8 +63,7 @@ export const addTransactionToTransactionList = (transactionObject) => {
       ${transactionObject.type}
       <div class="${transactionObject.type}-color-tag"></div>
       </td>
-      </tr>
-      `;
+      </tr>`;
 
   transactionList.innerHTML += newRow;
 };

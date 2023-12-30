@@ -1,17 +1,20 @@
-import { renderTransactionList } from "../scripts/index.mjs";
+import { renderTransactionList, updateChartLabels } from "../scripts/index.mjs";
 import { refreshChart } from "../scripts/my-graphs.js";
 import { addTransactionToDB } from "../scripts/util/database.js";
-import { updateChartLabels } from "../scripts/index.mjs";
-import Transaction from "../scripts/util/Transaction.js";
 import { with2Decimals } from "../scripts/util/util.mjs";
+import Transaction from "../scripts/util/Transaction.js";
+import {
+  showAddNewCategoryMenu,
+  hideAddNewCategoryMenu,
+} from "./add-new-category-menu.js";
 
 // Modal Elements
 export const modal = document.getElementById("myModal");
-const modalTitle = document.getElementById("modal-title");
+export const modalTitle = document.getElementById("modal-title");
 const modalBody = document.getElementById("modal-body");
 const categoryImg = document.getElementById("category-img");
-const categoryModal = document.querySelector(".category-modal");
 const modalErrorMsg = document.getElementById("modal-error-message");
+const categoryModal = document.querySelector(".category-modal");
 // Buttons
 const btnClose = document.getElementsByClassName("close")[0];
 const btnSelectExpense = document.getElementById("modal-select-expense");
@@ -23,13 +26,21 @@ const inputDate = document.getElementById("input-date");
 const inputCategory = document.getElementById("category-input");
 const inputDescription = document.getElementById("transaction-description");
 // Enums
-const Menu = Object.freeze({
+export const Menu = Object.freeze({
   ADD_TRANSACTION: "addTransaction",
   SELECT_CATEGORY: "selectCategory",
+  ADD_NEW_CATEGORY: "addNewCategory",
 });
 // Util
-let currentMenu = Menu.ADD_TRANSACTION;
+export class Modal {
+  static currentMenu;
+}
+Modal.currentMenu = Menu.ADD_TRANSACTION;
 let selectedTransactionType = Transaction.TransactionType.INCOME;
+
+export const setActiveMenu = (menu) => {
+  console.log(modal.dataset.activeMenu);
+};
 
 /////////////////////
 // Event Handlers //
@@ -41,11 +52,14 @@ const handleClickOutsideModal = (event) => {
 };
 
 const handleButtonClose = () => {
-  if (currentMenu === Menu.SELECT_CATEGORY) {
+  if (Modal.currentMenu === Menu.SELECT_CATEGORY) {
     hideSelectCategory();
     showAddTransaction();
-  } else {
+  } else if (Modal.currentMenu === Menu.ADD_TRANSACTION) {
     closeModal();
+  } else if (Modal.currentMenu === Menu.ADD_NEW_CATEGORY) {
+    hideAddNewCategoryMenu();
+    showSelectCategory();
   }
 };
 
@@ -99,6 +113,10 @@ const handleButtonAddTransaction = () => {
   }
 };
 
+const handleButtonAddNewCategory = () => {
+  showAddNewCategoryMenu();
+};
+
 ////////////////////////////
 // Add Transaction Logic //
 //////////////////////////
@@ -133,10 +151,10 @@ const showSelectCategory = () => {
   hideAddTransaction();
   modalTitle.innerText = "Select Category";
   categoryModal.style.display = "grid";
-  currentMenu = Menu.SELECT_CATEGORY;
+  Modal.currentMenu = Menu.SELECT_CATEGORY;
 };
 
-const hideSelectCategory = () => {
+export const hideSelectCategory = () => {
   categoryModal.style.display = "none";
 };
 
@@ -144,7 +162,7 @@ export const showAddTransaction = () => {
   hideSelectCategory();
   modalBody.style.display = "flex";
   modalTitle.innerText = "Add Transaction";
-  currentMenu = Menu.ADD_TRANSACTION;
+  Modal.currentMenu = Menu.ADD_TRANSACTION;
 };
 
 const hideAddTransaction = () => {
@@ -152,8 +170,9 @@ const hideAddTransaction = () => {
 };
 
 const closeModal = () => {
+  hideAddNewCategoryMenu();
   modal.style.display = "none";
-  currentMenu = Menu.ADD_TRANSACTION;
+  Modal.currentMenu = Menu.ADD_TRANSACTION;
   clearInputs();
 };
 
@@ -211,13 +230,20 @@ const clearInputs = () => {
 // SELECT CATEGORY LOGIC //
 //////////////////////////
 const addCategories = () => {
+  // Add new category button
+  categoryModal.innerHTML += `
+  <div id="btn-add-new-category" class="category-item hoverable border-grey">
+    <img src="./images/icons/add_circle.svg" alt="" />
+    <p>Add New</p>
+  </div>`;
+
+  // Other categories
   globalSettings.defaultCategories.forEach((category) => {
-    categoryModal.innerHTML += `
-      <div name="category-item" class="category-item hoverable" data-category=${category.category} data-category-img=${category.img}>
+    categoryModal.innerHTML += ` 
+    <div name="category-item" class="category-item hoverable" data-category=${category.category} data-category-img=${category.img}>
       <img src=${category.img} alt="" />
       <p>${category.category}</p>
-      </div>
-      `;
+    </div>`;
   });
 
   document.getElementsByName("category-item").forEach((element) => {
@@ -227,6 +253,9 @@ const addCategories = () => {
       onCategorySelected(category, imgUrl);
     });
   });
+
+  const button = document.getElementById("btn-add-new-category");
+  button.addEventListener("click", handleButtonAddNewCategory);
 };
 
 const onCategorySelected = (category, imgUrl) => {

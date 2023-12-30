@@ -1,0 +1,28 @@
+/* 
+https://medium.com/@stephan.romhart/how-i-organize-my-css-for-websites-without-a-framework-4d93fbbc74fe 
+*/
+
+:root {
+  /* Basic Colors */
+  --white: #fff;
+  --black: #000;
+  --black-transp-20: #00000033;
+  --black-transp-40: #00000066;
+
+  /* Project Colors */
+  --dark-grey-1: #121212;
+  --dark-grey-2: #1e1e23;
+  --dark-grey-2-transp: #1e1e24b3;
+  --dark-grey-3: #303034;
+  --dark-grey-3-transp: #30303499;
+  --light-grey-1: #b5b3b3;
+  --yellow: #ffc300;
+  --gradient-yellow: #f3ed77;
+  --orange: #ffa500;
+  --gradient-pink: #af4261;
+  --red-1: #bc5b5b;
+  --green-1: #97b964;
+  --blue: #435af7;
+
+  /* Layout Variables */
+}

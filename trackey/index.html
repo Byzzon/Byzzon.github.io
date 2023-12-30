@@ -10,6 +10,7 @@
       type="image/x-icon"
     />
     <!-- Styles -->
+    <link rel="stylesheet" href="./styles/global-styling.css" />
     <link rel="stylesheet" href="./styles/index.css" />
     <link rel="stylesheet" href="./styles/scrollbar.css" />
     <link rel="stylesheet" href="./components/add-transaction-modal.css" />
@@ -41,7 +42,7 @@
   </head>
   <body id="main-container" class="main-container">
     <!-- ADD-TRANSACTION-MODAL BEGIN -->
-    <div id="myModal" class="modal">
+    <div id="myModal" data-active-menu="" class="modal">
       <div id="modal-content" class="modal-content">
         <!-- Modal Header -->
         <div class="modal-header">
@@ -50,6 +51,7 @@
         </div>
         <!-- Modal Body -->
         <div>
+          <!-- Add Transaction Modal -->
           <div id="modal-body" class="modal-body">
             <p id="modal-error-message" class="error-msg-hidden"></p>
             <div class="transaction-type">
@@ -91,7 +93,30 @@
               </button>
             </div>
           </div>
-          <div class="category-modal"></div>
+          <!-- Select category menu -->
+          <div class="category-modal">
+            <!-- Categories are rendered here -->
+          </div>
+          <!-- Add new category menu -->
+          <div
+            id="add-new-category-menu"
+            class="modal-body"
+            style="display: none"
+          >
+            <div class="input-fields-container">
+              <label>Category Name</label>
+              <input
+                id="input-category-name"
+                type="text"
+                class="text-input rounded-border"
+              />
+              <label for="">Icon</label>
+              <div id="new-category-icon-list" class="category-modal">
+                <!-- Category Icons are rendered here -->
+              </div>
+              <button class="grey-button">Add Category</button>
+            </div>
+          </div>
         </div>
         <!-- <div class="modal-footer">
           <h3>Modal Footer</h3>
@@ -155,6 +180,10 @@
 
     <!-- Main Content -->
     <main>
+      <div class="devtools display-none">
+        <button id="btn-clear-database">clear database</button>
+      </div>
+
       <div class="greeting-cel">
         <h1 id="greeting-title"></h1>
         <p>Take a look at your current balance 👀</p>
@@ -185,12 +214,11 @@
         </button>
       </div>
 
+      <h2 class="title-2">Transaction Overview</h2>
       <!-- Transaction History -->
       <div
         class="transaction-list-cel grey-container rounded-border overflow-scroll"
       >
-        <h2 class="title-2">Transaction Overview</h2>
-        <button id="btn-clear-database">clear database</button>
         <table class="transaction-list">
           <thead>
             <tr>
