@@ -1,0 +1,41 @@
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #d6d5d2;
+  display: flex;
+  justify-content: center;
+}
+
+.main {
+  background-image: url("img/paper-texture.jpg");
+  background-size: 50%;
+  border-radius: 20px;
+  height: 100vh;
+  width: 80vw;
+}
+
+.socials-nav {
+  display: grid;
+  justify-content: end;
+  padding: 0 2rem;
+}
+
+.socials-nav ul {
+  display: flex;
+  list-style: none;
+}
+
+.socials-nav ul li {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding-right: 0.5rem;
+}
+
+.socials-nav ul li a {
+  color: #373737;
+  text-decoration: none;
+  transition: 1s;
+}
+
+.socials-nav ul li a:hover {
+  text-decoration: underline;
+}
