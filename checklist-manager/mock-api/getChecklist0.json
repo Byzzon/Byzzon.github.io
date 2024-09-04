@@ -1,0 +1,72 @@
+{
+  "id": 0,
+  "aircraft_name": "Airbus A320",
+  "checklist_title": "Airbus A320 (Simplified)",
+  "phases": [
+    {
+      "id": 0,
+      "title": "PRELIMINARY COCKPIT PREPARATION",
+      "steps": [
+        {
+          "id": 0,
+          "item": "Engine Master 1 & 2",
+          "action": "OFF",
+          "completed": false
+        },
+        {
+          "id": 1,
+          "item": "Ignition Selector",
+          "action": "NORMAL",
+          "completed": false
+        },
+        {
+          "id": 2,
+          "item": "Weather Radar",
+          "action": "OFF",
+          "completed": false
+        },
+        {
+          "id": 3,
+          "item": "Landing Gear Lever",
+          "action": "DOWN",
+          "completed": false
+        },
+        {
+          "id": 4,
+          "item": "Wipers",
+          "action": "BOTH OFF",
+          "completed": false
+        },
+        {
+          "id": 5,
+          "item": "Battery 1 & 2",
+          "action": "CHECK OFF",
+          "completed": false
+        },
+        {
+          "id": 6,
+          "item": "Battery 1 & 2",
+          "action": "CHECK ABOVE 2.5 VOLT",
+          "completed": false
+        },
+        {
+          "id": 7,
+          "item": "Battery 1 & 2",
+          "action": "ON",
+          "completed": false
+        },
+        {
+          "id": 8,
+          "item": "Ext. Power (if available)",
+          "action": "ON",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "title": "COCKPIT PREPARATION",
+      "steps": []
+    }
+  ]
+}

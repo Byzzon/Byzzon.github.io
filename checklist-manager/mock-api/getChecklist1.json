@@ -1,0 +1,24 @@
+{
+  "id": 0,
+  "aircraft_name": "Cessna 152",
+  "checklist_title": "Cessna 152",
+  "phases": [
+    {
+      "id": 0,
+      "title": "BEFORE ENGINE START",
+      "steps": [
+        {
+          "id": 0,
+          "item": "Preflight Inspection",
+          "action": "COMPLETE",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "title": "ENGINE START",
+      "steps": []
+    }
+  ]
+}
